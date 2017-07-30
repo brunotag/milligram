@@ -1,9 +1,9 @@
 {
-	"name": "milligram",
+	"name": "milligram-bruno",
 	"version": "1.3.0",
 	"description": "A minimalist CSS framework.",
 	"homepage": "https://milligram.github.io",
-	"repository": "milligram/milligram",
+	"repository": "brunotag/milligram",
 	"license": "MIT",
 	"author": "CJ Patoilo <cjpatoilo@gmail.com>",
 	"main": "dist/milligram.css",
@@ -50,7 +50,6 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "^6.5.4",
-		"ava": "^0.17.0",
 		"backstopjs": "^2.3.5",
 		"banner-cli": "^0.11.0",
 		"browser-sync": "^2.18.5",
@@ -74,16 +73,19 @@
 		"build": "run-s clean sass autoprefixer banner",
 		"clean": "rimraf dist",
 		"sass": "node-sass --output-style expanded src/milligram.sass dist/milligram.css && node-sass --output-style compressed src/milligram.sass dist/milligram.min.css",
-		"autoprefixer": "postcss -u autoprefixer --no-map.inline --autoprefixer.browsers \"last 1 versions\" -r dist/*.css",
-		"banner": "banner-cli dist/*.css",
+		"autoprefixer": "run-s autoprefixer1 autoprefixer2",
+		"autoprefixer2": "postcss -u autoprefixer --no-map.inline --autoprefixer.browsers \"last 1 versions\" -r dist/milligram.css",
+		"autoprefixer1": "postcss -u autoprefixer --no-map.inline --autoprefixer.browsers \"last 1 versions\" -r dist/milligram.min.css",
+		"banner": "run-s banner1 banner2",
+		"banner1": "banner-cli dist/milligram.css",
+		"banner2": "banner-cli dist/milligram.min.css",
 		"watch": "onchange src -- run-p build",
 		"serve": "browser-sync start --no-notify -s test --ss dist -f dist",
 		"backstop": "run-s build && run-p serve compare",
 		"reference": "backstop reference --configPath=backstop.conf.js",
 		"compare": "backstop test --configPath=backstop.conf.js",
 		"lint": "sass-lint -c .sasslintrc src --verbose --no-exit && eslint test -c styled && editorconfig-tools check .",
-		"ava": "nyc ava",
-		"test": "run-s build lint ava",
+		"test": "run-s build lint",
 		"precommit": "run-p test"
 	}
 }
